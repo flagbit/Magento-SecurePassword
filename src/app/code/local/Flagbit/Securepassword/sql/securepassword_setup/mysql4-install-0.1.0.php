@@ -6,6 +6,7 @@
  * @package    Flagbit_Securepassword
  * @author 	   Flagbit GmbH & Co. KG <magento@flagbit.de>
  */
+
 $installer = $this;
 $installer->startSetup();
 

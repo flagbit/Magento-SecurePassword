@@ -36,7 +36,7 @@
             <securepassword_setup>
                 <setup>
                     <module>Flagbit_Securepassword</module>
-                    <class>Flagbit_Securepassword_Model_Entity_Setup</class>
+                    <class>Mage_Customer_Model_Entity_Setup</class>
                 </setup>
                 <connection>
                     <use>core_setup</use>
