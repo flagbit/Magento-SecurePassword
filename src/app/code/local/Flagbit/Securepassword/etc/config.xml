@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<modules>
+		<Flagbit_Securepassword>
+			<version>0.1.0</version>
+		</Flagbit_Securepassword>
+	</modules>
+	
+	<global>
+		<blocks>
+            <securepassword>
+                <class>Flagbit_Securepassword_Block</class>
+            </securepassword>
+            <customer>
+            	<rewrite>
+            		<account_forgotpassword>Flagbit_Securepassword_Block_Account_Forgotpassword</account_forgotpassword>
+            	</rewrite>
+            </customer>
+        </blocks>
+        <models>
+        	<securepassword>
+        		<class>Flagbit_Securepassword_Model</class>
+        	</securepassword>
+        	<customer>
+        		<rewrite>
+        			<customer>Flagbit_Securepassword_Model_Customer</customer>
+        		</rewrite>
+        	</customer>
+        	<customer_entity>
+        		<rewrite>
+        			<customer>Flagbit_Securepassword_Model_Entity_Customer</customer>
+        		</rewrite>
+        	</customer_entity>
+        </models>
+        <resources>
+            <securepassword_setup>
+                <setup>
+                    <module>Flagbit_Securepassword</module>
+                    <class>Flagbit_Securepassword_Model_Entity_Setup</class>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </securepassword_setup>
+        </resources>
+	</global>
+	
+	<frontend>
+        <routers>
+            <customer>
+            	<args>
+            		<modules>
+            			<Flagbit_Securepassword before="Mage_Customer_AccountController">Flagbit_Securepassword_Frontend_Customer</Flagbit_Securepassword>
+            		</modules>
+            	</args>
+            </customer>
+            <securepassword>
+                <use>standard</use>
+                <args>
+                    <module>Flagbit_Securepassword</module>
+                    <frontName>securepassword</frontName>
+                </args>
+            </securepassword>
+        </routers>
+        <layout>
+          	<updates>
+              <securepassword>
+                  <file>securepassword.xml</file>
+              </securepassword>
+          	</updates>
+      </layout>
+      <!-- testkommentar -->
+      <translate>
+           <modules>
+               <securepassword>
+                   <files>
+                       <default>Flagbit_Securepassword.csv</default>
+                   </files>
+               </securepassword>
+           </modules>
+       </translate>
+    </frontend>
+</config>

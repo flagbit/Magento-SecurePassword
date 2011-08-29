@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Flagbit-Secure-Passwords" basedir=".">
+ 
+	<property file="build.properties"/>
+	<property file="build.default.properties"/>
+	<property name="srcdir" value="${basedir}/src"/>
+	<property name="vagrantdir" value="${basedir}/.vagrant"/>
+ 
+	<target name="01 vagrant init">
+		  <exec dir="${vagrantdir}" executable="cmd">
+			  <arg line="/c vagrant init ${vagrant.basebox}"/>
+		  </exec>
+ 
+		  <exec dir="${vagrantdir}" executable="cmd">
+			  <arg line="/c vagrant up"/>
+		  </exec>
+ 
+	</target>
+
+	<target name="02 vagrant up">
+		  <exec dir="${vagrantdir}" executable="cmd">
+			  <arg line="/c vagrant up"/>
+		  </exec>
+	</target>
+ 
+	<target name="03 vagrant reload">
+		  <exec dir="${vagrantdir}" executable="cmd">
+			  <arg line="/c vagrant reload"/>
+		  </exec>
+	</target>
+ 	
+	<target name="04 vagrant suspend">
+		  <exec dir="${vagrantdir}" executable="cmd">
+			  <arg line="/c vagrant halt"/>
+		  </exec>
+	</target>
+	
+	<target name="05 vagrant resume">
+		  <exec dir="${vagrantdir}" executable="cmd">
+			  <arg line="/c vagrant halt"/>
+		  </exec>
+	</target>
+
+	<target name="06 vagrant halt">
+		  <exec dir="${vagrantdir}" executable="cmd">
+			  <arg line="/c vagrant halt"/>
+		  </exec>
+	</target>
+	
+	<target name="08 vagrant configure mageinstall">	
+		  
+		  <sshexec host="${vagrant.ip}"
+			username="${vagrant.user}"
+			port="${vagrant.port}"
+			password="${vagrant.pass}"
+			trust="true"
+			verbose="true"
+			command="rm /usr/local/bin/mageinstall; wget http://web13.site.flagbit.com/mageinstall/mageinstall -P /usr/local/bin/; chmod +x /usr/local/bin/mageinstall"/>
+		  
+		  <sshexec host="${vagrant.ip}"
+			username="${vagrant.user}"
+			port="${vagrant.port}"
+			password="${vagrant.pass}"
+			trust="true"
+			verbose="true"
+			command="wget http://web13.site.flagbit.com/mageinstall/vagrant-magento.tgz -P /usr/local/src/magento; cd /usr/local/src/magento; tar xfz vagrant-magento.tgz"/>
+			
+    </target>
+ 
+	<target name="deploy to ssh.dev">
+	<antcall target="deploy_scp">
+		<param name="transfer.user" value="${transfer.dev.user}"/>
+		<param name="transfer.server" value="${transfer.dev.server}"/>
+		<param name="transfer.password" value="${transfer.dev.password}"/>
+		<param name="transfer.keyfile" value="${transfer.dev.keyfile}"/>
+		<param name="transfer.pass" value="${transfer.dev.pass}"/>
+		<param name="transfer.path" value="${transfer.dev.path}"/>
+		<param name="transfer.cache" value="${transfer.dev.cache}"/>
+	</antcall>
+	</target>
+ 
+	<target name="deploy to ssh.live">
+		<input
+		    message="Are you sure you want to deploy to the Live-System (yes/no)?"
+		    validargs="yes,no"
+		    addproperty="do.deploy"
+		/>
+		<condition property="do.abort">
+			<equals arg1="no" arg2="${do.deploy}"/>
+		</condition>
+		<fail if="do.abort">Build aborted by user.</fail>
+ 
+		<antcall target="deploy_scp">
+			<param name="transfer.user" value="${transfer.live.user}"/>
+			<param name="transfer.password" value="${transfer.live.password}"/>
+			<param name="transfer.server" value="${transfer.live.server}"/>
+			<param name="transfer.keyfile" value="${transfer.live.keyfile}"/>
+			<param name="transfer.pass" value="${transfer.live.pass}"/>
+			<param name="transfer.path" value="${transfer.live.path}"/>
+			<param name="transfer.cache" value="${transfer.live.cache}"/>
+		</antcall>
+	</target>
+ 
+	<target name="deploy to local dir">
+		<antcall target="deploy_dir">
+			<param name="transfer.path" value="${transfer.local.path}"/>
+			<param name="transfer.cache" value="${transfer.local.cache}"/>
+	  </antcall>
+	</target>
+ 
+	<target name="deploy_scp">
+	    <scp
+			todir="${transfer.user}:${transfer.password}@${transfer.server}:${transfer.path}"
+	    	passphrase="${transfer.pass}"
+			trust="true"
+			verbose="true"
+	        >
+	        <fileset dir="src/Magento">
+	            <include name="**/*"/>
+	            <modified>
+	            	 <param name="cache.cachefile" value="${transfer.cache}.cache.properties"/>
+	            </modified>
+	            <exclude name="**/.svn"/>
+	            <exclude name=".buildpath"/>
+	            <exclude name=".project"/>
+	            <exclude name=".settings/**"/>
+	        	<exclude name=".cache/**"/>
+				<exclude name=".git/**"/>
+	        	<exclude name="webserver/**"/>
+	        	<exclude name=".externalToolBuilders/**"/>
+	            <exclude name="downloader/**"/>
+	        	<exclude name="pear"/>
+	            <exclude name="*cache.properties"/>
+	            <exclude name="build.default.properties"/>
+	            <exclude name="build.properties"/>
+	            <exclude name="build.xml"/>
+	            <exclude name="TODO"/>
+	        	<exclude name="var/**" />
+	        	<exclude name="Thumbs.db" />
+	        </fileset>
+	    </scp>
+	</target>
+ 
+	<target name="deploy_dir">
+		<copy todir="${transfer.path}" overwrite="yes" verbose="yes">
+	        <fileset dir="src/">
+	            <include name="**/*"/>
+	            <modified>
+	            	 <param name="cache.cachefile" value="${transfer.cache}.cache.properties"/>
+	            </modified>
+				<modified />
+	            <exclude name=".buildpath"/>
+	            <exclude name=".project"/>
+	            <exclude name=".settings/**"/>
+	        	<exclude name=".cache/**"/>
+	        	<exclude name="webserver/**"/>
+	        	<exclude name=".externalToolBuilders/**"/>
+	            <exclude name="downloader/**"/>
+	        	<exclude name="pear"/>
+	            <exclude name="*cache.properties"/>
+	            <exclude name="build.default.properties"/>
+	            <exclude name="build.properties"/>
+	            <exclude name="build.xml"/>
+	            <exclude name="TODO"/>
+	        	<exclude name="var/**" />
+	        	<exclude name="Thumbs.db" />
+			</fileset>
+		</copy>
+	</target>
+</project>
