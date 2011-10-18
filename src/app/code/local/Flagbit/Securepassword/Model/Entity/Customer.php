@@ -18,7 +18,7 @@ class Flagbit_Securepassword_Model_Entity_Customer extends Mage_Customer_Model_E
 	 */
 	public function loadBySecurePasswordKey(Mage_Customer_Model_Customer $customer, $key, $testOnly = false)
     {
-        
+        //@todo get AttributeId by: Mage::getModel('eav/entity_attribute')->loadByCode('catalog_category', self::RULE_ATTRIBUTE_CODE);
     	$select = $this->_getReadAdapter()->select()
             ->from(array('a'=>$this->getTable('eav/attribute')), array('a.attribute_id'))
             ->where('a.attribute_code = ?', 'securepasswordkey');
