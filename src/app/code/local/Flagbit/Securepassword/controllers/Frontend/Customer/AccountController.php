@@ -36,11 +36,8 @@ class Flagbit_Securepassword_Frontend_Customer_AccountController extends Mage_Cu
 
             if ($customer->getId()) {
                 try {
-                	
-                    $newSecureHash = 	urlencode(
-                    						base64_encode(
+                    $newSecureHash = 		Mage::helper('securepassword/data')->encode(
                     									serialize($this->generateSecurityPasswordHash(20))
-                    									)
                     							);
                     
                     $customer->setSecurepasswordkey($newSecureHash);

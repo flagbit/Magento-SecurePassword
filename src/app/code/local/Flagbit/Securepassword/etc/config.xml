@@ -2,7 +2,7 @@
 <config>
 	<modules>
 		<Flagbit_Securepassword>
-			<version>0.1.0</version>
+			<version>0.2.0</version>
 		</Flagbit_Securepassword>
 	</modules>
 	
@@ -17,6 +17,11 @@
             	</rewrite>
             </customer>
         </blocks>
+        <helpers>
+        	<securepassword>
+        		<class>Flagbit_Securepassword_Helper</class>
+        	</securepassword>
+        </helpers>
         <models>
         	<securepassword>
         		<class>Flagbit_Securepassword_Model</class>
