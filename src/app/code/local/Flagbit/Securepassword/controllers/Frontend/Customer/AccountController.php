@@ -67,9 +67,9 @@ class Flagbit_Securepassword_Frontend_Customer_AccountController extends Mage_Cu
      * 
      * Set a random security hash
      * @param integer $length
-     * 
      */
     public function generateSecurityPasswordHash($length = 15, $loopCount = 5) {
+        //@todo add expiration 
     	$newSecureHash = '';
     	for ($i=0; $i<=$loopCount; $i++) {
     		$newSecureHash .= Mage::helper('core')->getRandomString($length);

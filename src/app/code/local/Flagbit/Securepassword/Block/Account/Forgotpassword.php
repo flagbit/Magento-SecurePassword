@@ -60,6 +60,7 @@ class Flagbit_Securepassword_Block_Account_Forgotpassword extends Mage_Customer_
 			$email = $customer->getEmail();
 			
             if($email != '' && $sessionSecurePasswordHash == $securePasswordHash){
+                //@todo remove german comments!
             	// 1 -> Daten passen
             	return true;
             }

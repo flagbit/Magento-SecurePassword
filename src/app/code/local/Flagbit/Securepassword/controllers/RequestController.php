@@ -66,6 +66,7 @@ class Flagbit_Securepassword_RequestController extends Mage_Core_Controller_Fron
 			$paramsecurehash = '';
 		}
 		
+		//@todo Wrong Type of URL generation use Mage::getUrl($path, $arguments) insteed
 		$newUrl = Mage::getBaseUrl();
         $newUrl .= 'securepassword/request/changepassword/secureHash/';
         $newUrl .= $paramsecurehash;
