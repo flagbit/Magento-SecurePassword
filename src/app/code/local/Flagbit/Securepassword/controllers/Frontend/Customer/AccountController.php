@@ -83,7 +83,7 @@ class Flagbit_Securepassword_Frontend_Customer_AccountController extends Mage_Cu
     	    	
     	$secureHash = array(
     							'hash'			=> sha1($tempHash),
-    							'expire' 		=> Mage::getModel('core/date')->timestamp(time())+900,
+    							'expire' 		=> Mage::getModel('core/date')->timestamp(time())+Mage::getStoreConfig('securepassword/general/timeout'),
     	 					);
     	    	
     	return $secureHash;

@@ -29,7 +29,7 @@ class Flagbit_Securepassword_RequestController extends Mage_Core_Controller_Fron
     		$deactive = $this->_getSession()->getSessionDeactivatedAt();
     		$timestamp = time();
     		if (strlen($deactive == 0)) {
-				$date = $timestamp + 900;
+				$date = $timestamp + Mage::getStoreConfig('securepassword/general/timeout');
     			$this->_getSession()->setSessionDeactivatedAt($date);
     			$deactive = $this->_getSession()->getSessionDeactivatedAt();
 			}

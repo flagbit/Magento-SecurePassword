@@ -33,8 +33,8 @@ class Flagbit_Securepassword_Block_Account_Forgotpassword extends Mage_Customer_
 	         $securePasswordHash = $customer->getSecurepasswordkey();
 			
 			$timestamp = time();
-			// time in 15 minutes
-			$date = $timestamp + 900;
+			$date = $timestamp + Mage::getStoreConfig('securepassword/general/timeout');
+			
 			$deactive = $this->_getSession()->getSessionDeactivatedAt();
 			if ($deactive == '') {
 				$this->_getSession()->setSessionDeactivatedAt($date);
