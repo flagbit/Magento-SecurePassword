@@ -63,7 +63,6 @@ class Flagbit_Securepassword_Block_Account_Forgotpassword extends Mage_Customer_
 			);
 			
 			$email = $customer->getEmail();
-			Zend_Debug::dump($hashExpiration['expire']-$now);
             if($email != '' && $sessionSecurePasswordHash == $securePasswordHash && (($hashExpiration['expire']-$now)>0)) {
             	
                 //@todo remove german comments!
