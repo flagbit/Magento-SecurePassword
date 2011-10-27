@@ -72,9 +72,9 @@ class Flagbit_Securepassword_Frontend_Customer_AccountController extends Mage_Cu
      */
     public function generateSecurityPasswordHash($length = 15, $timeout = 0 ) {
         
-    	//if( $timeout == 0 ) {
+    	if( $timeout == 0 ) {
     		$timeout = Mage::getStoreConfig('securepassword/general/timeout');
-    	//}
+    	}
     	
         $tempHash = '';
     	$tempHash .= Mage::helper('core')->getRandomString($length);
