@@ -56,14 +56,14 @@ class Flagbit_Securepassword_Block_Account_Forgotpassword extends Mage_Customer_
 			}
 			
 			$sessionSecurePasswordHash = $params['secureHash'];
+			$now = time();
 
-			$now = Mage::getModel('core/date')->timestamp(time());
-			$hashExpiration = unserialize(Mage::helper('securepassword/data')->decode(
-			$sessionSecurePasswordHash)
-			);
+			$hashExpiration = unserialize(Mage::helper('securepassword/data')->urlSafeDecode($sessionSecurePasswordHash));
 			
 			$email = $customer->getEmail();
-            if($email != '' && $sessionSecurePasswordHash == $securePasswordHash && (($hashExpiration['expire']-$now)>0)) {
+            if($email != '' &&
+               $sessionSecurePasswordHash == $securePasswordHash &&
+               ($hashExpiration['expire'] - $now) > 0 ) {
             	
                 //@todo remove german comments!
             	// 1 -> Daten passen

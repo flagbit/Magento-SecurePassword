@@ -28,7 +28,7 @@ class Flagbit_Securepassword_Helper_Data extends Mage_Core_Helper_Abstract
 * @param string $data The data to encode.
 * @return string The encoded data, as a string.
 */
-    public function encode($data)
+    public function urlSafeEncode($data)
     {
         return strtr(base64_encode($data), array(
             '/' => '_',
@@ -46,7 +46,7 @@ class Flagbit_Securepassword_Helper_Data extends Mage_Core_Helper_Abstract
 * @param bool $strict Returns FALSE if input contains character from outside the base64 alphabet.
 * @return Returns the original data or FALSE on failure. The returned data may be binary.
 */
-    public function decode($data, $strict = false)
+    public function urlSafeDecode($data, $strict = false)
     {
         $data = strtr($data, array(
             '_' => '/',

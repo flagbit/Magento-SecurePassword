@@ -38,6 +38,7 @@ class Flagbit_Securepassword_RequestController extends Mage_Core_Controller_Fron
 				$this->renderLayout();	
 			}
 			else {
+				Zend_Debug::dump($deactive-$timestamp);				
 				$this->_getSession()->addError($this->__('The session timed out.'));
 				$this->_forward('login','account','customer');
 			}

@@ -36,10 +36,8 @@ class Flagbit_Securepassword_Frontend_Customer_AccountController extends Mage_Cu
 
             if ($customer->getId()) {
                 try {
-                    $newSecureHash = 		Mage::helper('securepassword/data')->encode(
-                    									serialize($this->generateSecurityPasswordHash(20))
-                    							);
-                    
+                    $newSecureHash = $this->generateSecurityPasswordHash(20);
+                                        
                     $customer->setSecurepasswordkey($newSecureHash);
                     $customer->save();
 
@@ -72,20 +70,21 @@ class Flagbit_Securepassword_Frontend_Customer_AccountController extends Mage_Cu
      * @param integer $length
      * @return array $secureHash
      */
-    public function generateSecurityPasswordHash($length = 15, $loopCount = 5) {
+    public function generateSecurityPasswordHash($length = 15, $timeout = 0 ) {
         
-    	//@todo add expiration 
-    	$tempHash = '';
-    	  	
-    	for ($i=0; $i<=$loopCount; $i++) {
-    		$tempHash .= Mage::helper('core')->getRandomString($length);
-    	}
-    	    	
+    	//if( $timeout == 0 ) {
+    		$timeout = Mage::getStoreConfig('securepassword/general/timeout');
+    	//}
+    	
+        $tempHash = '';
+    	$tempHash .= Mage::helper('core')->getRandomString($length);
+   	
     	$secureHash = array(
-    							'hash'			=> sha1($tempHash),
-    							'expire' 		=> Mage::getModel('core/date')->timestamp(time())+Mage::getStoreConfig('securepassword/general/timeout'),
+    						'hash'		=> sha1($tempHash),
+    						'expire'	=> time()+$timeout,
     	 					);
-    	    	
+    	
+    	$secureHash = Mage::helper('securepassword/data')->urlSafeEncode( serialize($secureHash) );    	
     	return $secureHash;
     }
 }
