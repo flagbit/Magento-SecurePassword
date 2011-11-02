@@ -69,7 +69,6 @@
               </securepassword>
           	</updates>
       </layout>
-      <!-- testkommentar -->
       <translate>
            <modules>
                <securepassword>
