@@ -54,7 +54,7 @@ class Flagbit_Securepassword_RequestController extends Mage_Core_Controller_Fron
      * saves the new password and deletes session parts if all data a correct
      */
 	public function editpostAction()
-	{
+	{die("hier");
 		$deactive = $this->_getSession()->getSessionDeactivatedAt();
 		$timestamp = time();
 		
@@ -66,9 +66,8 @@ class Flagbit_Securepassword_RequestController extends Mage_Core_Controller_Fron
 			$paramsecurehash = '';
 		}
 		
-		//@todo Wrong Type of URL generation use Mage::getUrl($path, $arguments) insteed
-		$newUrl = Mage::getBaseUrl();
-        $newUrl .= 'securepassword/request/changepassword/secureHash/';
+		$newUrl = Mage::getUrl($path, $arguments);
+		$newUrl .= 'securepassword/request/changepassword/secureHash/';
         $newUrl .= $paramsecurehash;
 		
 		if ($timestamp <= $deactive) {
@@ -79,7 +78,7 @@ class Flagbit_Securepassword_RequestController extends Mage_Core_Controller_Fron
 	            $parammail = $customer->email;
 	
 	       if ($paramsecurehash != '') {
-	        	// wird password and confirmation übertragen
+	        	// is password and confirmation given
 				if (isset($params["password"]) && isset($params["confirmation"])) {
 					$newPassword = trim($params["password"]," ");
 					$newPasswordConfirmation = trim ($params["confirmation"]," ");
