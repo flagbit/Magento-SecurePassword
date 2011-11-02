@@ -48,6 +48,15 @@
                 </connection>
             </securepassword_setup>
         </resources>
+        <template>
+            <email>
+                <customer_password_forgot_email_template translate="label" module="customer">
+                    <label>New password</label>
+                    <file>securepassword_new.html</file>
+                    <type>html</type>
+                </customer_password_forgot_email_template>
+            </email>
+        </template>
 	</global>
 	
 	<frontend>
