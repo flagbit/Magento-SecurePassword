@@ -33,8 +33,8 @@ class Flagbit_Securepassword_Block_Account_Forgotpassword extends Mage_Customer_
 	         $securePasswordHash = $customer->getSecurepasswordkey();
 			
 			$timestamp = time();
-			// time in 15 minutes
-			$date = $timestamp + 900;
+			$date = $timestamp + Mage::getStoreConfig('securepassword/general/timeout');
+			
 			$deactive = $this->_getSession()->getSessionDeactivatedAt();
 			if ($deactive == '') {
 				$this->_getSession()->setSessionDeactivatedAt($date);
@@ -49,23 +49,30 @@ class Flagbit_Securepassword_Block_Account_Forgotpassword extends Mage_Customer_
 					}	
 					$activeHash = $hash;
 					$this->_getSession()->setActiveHash($activeHash);
-				}
+				}				
 				if ($securePasswordHash != $activeHash) {
 					$this->_getSession()->setSessionDeactivatedAt($date);
 				}
 			}
 			
 			$sessionSecurePasswordHash = $params['secureHash'];
+			$now = time();
+
+			$hashExpiration = unserialize(Mage::helper('securepassword/data')->urlSafeDecode($sessionSecurePasswordHash));
 			
 			$email = $customer->getEmail();
-			
-            if($email != '' && $sessionSecurePasswordHash == $securePasswordHash){
-                // 1 -> data fit
+
+			if($email != '' &&
+               $sessionSecurePasswordHash == $securePasswordHash &&
+               ($hashExpiration['expire'] - $now) > 0 ) {
+            	
+                //@todo remove german comments!
+            	// 1 -> data fit
             	return true;
             }
             else {
             	// return error message
-            	$this->_getSession()->addError($this->__('Email or security hash does not match.'));
+            	$this->_getSession()->addError($this->__('Email or security hash does not match or security hash has been expired.'));
             	return;
             	//return $this->__('Email or security hash does not match.');
             	
