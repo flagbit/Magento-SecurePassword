@@ -26,7 +26,9 @@ class Flagbit_Securepassword_RequestController extends Mage_Core_Controller_Fron
     {
     	$params = Mage::app()->getRequest()->getParams();
     	if (isset($params['secureHash'])) {
-    		$deactive = $this->_getSession()->getSessionDeactivatedAt();
+    		$secureHash = Mage::helper('securepassword/data')->urlSafeDecode( $params['secureHash'] );
+    		$secureHash = unserialize($secureHash);
+    		$deactive = $secureHash["expire"];
     		$timestamp = time();
     		if (strlen($deactive == 0)) {
 				$date = $timestamp + Mage::getStoreConfig('securepassword/general/timeout');
@@ -54,7 +56,7 @@ class Flagbit_Securepassword_RequestController extends Mage_Core_Controller_Fron
      * saves the new password and deletes session parts if all data a correct
      */
 	public function editpostAction()
-	{die("hier");
+	{
 		$deactive = $this->_getSession()->getSessionDeactivatedAt();
 		$timestamp = time();
 		
@@ -65,6 +67,9 @@ class Flagbit_Securepassword_RequestController extends Mage_Core_Controller_Fron
 		else {
 			$paramsecurehash = '';
 		}
+		
+		$path = '';
+		$arguments = '';
 		
 		$newUrl = Mage::getUrl($path, $arguments);
 		$newUrl .= 'securepassword/request/changepassword/secureHash/';
