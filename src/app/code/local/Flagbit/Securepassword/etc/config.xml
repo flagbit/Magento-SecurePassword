@@ -31,6 +31,11 @@
         			<customer>Flagbit_Securepassword_Model_Customer</customer>
         		</rewrite>
         	</customer>
+        	<customer_resource>
+        		<rewrite>
+        			<customer>Flagbit_Securepassword_Model_Resource_Customer</customer>
+        		</rewrite>
+        	</customer_resource>
         	<customer_entity>
         		<rewrite>
         			<customer>Flagbit_Securepassword_Model_Entity_Customer</customer>
@@ -97,7 +102,7 @@
     <default>
     	<securepassword>
     		<general>
-    			<timeout>300</timeout>
+    			<timeout>900</timeout>
     		</general>
     	</securepassword>
     </default>
