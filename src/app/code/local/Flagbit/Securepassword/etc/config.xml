@@ -11,11 +11,6 @@
             <securepassword>
                 <class>Flagbit_Securepassword_Block</class>
             </securepassword>
-            <customer>
-            	<rewrite>
-            		<account_forgotpassword>Flagbit_Securepassword_Block_Account_Forgotpassword</account_forgotpassword>
-            	</rewrite>
-            </customer>
         </blocks>
         <helpers>
         	<securepassword>
@@ -25,23 +20,17 @@
         <models>
         	<securepassword>
         		<class>Flagbit_Securepassword_Model</class>
+        		<resourceModel>securepassword_entity</resourceModel>
         	</securepassword>
-        	<customer>
-        		<rewrite>
-        			<customer>Flagbit_Securepassword_Model_Customer</customer>
-        		</rewrite>
-        	</customer>
-        	<customer_resource>
-        		<rewrite>
-        			<customer>Flagbit_Securepassword_Model_Resource_Customer</customer>
-        		</rewrite>
-        	</customer_resource>
-        	<customer_entity>
-        		<rewrite>
-        			<customer>Flagbit_Securepassword_Model_Entity_Customer</customer>
-        		</rewrite>
-        	</customer_entity>
-        </models>
+            <securepassword_entity>
+                <class>Flagbit_Securepassword_Model_Entity</class>
+                <entities>
+                    <entity>
+                        <table>customer_entity</table>
+                    </entity>
+                </entities>             
+            </securepassword_entity>
+        </models>        
         <resources>
             <securepassword_setup>
                 <setup>
@@ -102,7 +91,7 @@
     <default>
     	<securepassword>
     		<general>
-    			<timeout>900</timeout>
+    			<timeout>90000</timeout>
     		</general>
     	</securepassword>
     </default>

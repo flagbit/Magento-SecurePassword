@@ -16,7 +16,7 @@ class Flagbit_Securepassword_Model_Entity_Customer extends Mage_Customer_Model_E
 	 * @param string $key
 	 * @param unknown_type $testOnly
 	 */
-	public function loadBySecurePasswordKey(Mage_Customer_Model_Customer $customer, $key, $testOnly = false)
+	public function loadBySecurePasswordKey(Mage_Customer_Model_Customer $customer, $hash)
     {
         $attribute_id = Mage::getModel('eav/entity_attribute')->loadByCode('customer', 'securepasswordkey')->getId();
         	
@@ -24,7 +24,7 @@ class Flagbit_Securepassword_Model_Entity_Customer extends Mage_Customer_Model_E
             ->from(array('c' => $this->getEntityTable()), array($this->getEntityIdField()))
             ->joinLeft(array('ct' => $this->getEntityTable().'_text'),'c.entity_id = ct.entity_id')
             ->where('ct.attribute_id=?', $attribute_id)
-            ->where('ct.value=?',$key);
+            ->where($this->_getReadAdapter()->quoteInto(new Zend_Db_Expr('MD5(ct.value) = ? '), $hash));
            
         if ($customer->getSharingConfig()->isWebsiteScope()) {
             if (!$customer->hasData('website_id')) {
@@ -33,7 +33,7 @@ class Flagbit_Securepassword_Model_Entity_Customer extends Mage_Customer_Model_E
             $select->where('website_id=?', (int)$customer->getWebsiteId());
         }
 
-        if ($id = $this->_getReadAdapter()->fetchOne($select, array('customer_securepasswordkey' => $key))) {
+        if ($id = $this->_getReadAdapter()->fetchOne($select, array('securepasswordkey' => $hash))) {
             $this->load($customer, $id);
         }
         else {

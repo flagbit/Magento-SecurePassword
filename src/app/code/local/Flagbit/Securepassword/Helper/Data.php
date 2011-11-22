@@ -18,43 +18,38 @@
 
 class Flagbit_Securepassword_Helper_Data extends Mage_Core_Helper_Abstract
 {
+    const XML_CONFIG_TIMEOUT= 'securepassword/general/timeout';
 
-/**
-* Encode the given data very similar to base64
-*
-* Different from the original base64 algorithm this method only returns
-* url safe characters.
-*
-* @param string $data The data to encode.
-* @return string The encoded data, as a string.
-*/
-    public function urlSafeEncode($data)
+    /**
+     * get serialized Password Hash Array with Timeout
+     * 
+     * @param int $timeout
+     * @param int $length
+     * @return string $secureHash
+     */
+    public function getSerializedHashWithTimeout($timeout = null, $length = 15) 
     {
-        return strtr(base64_encode($data), array(
-            '/' => '_',
-            '+' => '-',
-            '=' => '',
-        ));
+    	if($timeout === null) {
+    		$timeout = Mage::getStoreConfig(self::XML_CONFIG_TIMEOUT);
+    	}
+    	$secureHash = array(
+    						'hash'		=> Mage::helper('core')->getRandomString($length),
+    						'expire'	=> empty($timeout) ? 0 : time()+$timeout,
+    	 					);
+    	
+    	return serialize($secureHash);    	
+    }
+
+    public function validateSerializedHashWithTimeout($serializedHash, $hash)
+    {
+        $valid = false;
+        $hashdata = unserialize($serializedHash);
+        if(!empty($hashdata['expire'])){
+            $valid = $hashdata['expire'] > time();
+        }else{
+            $valid = true;
+        }
+        return $valid;
     }
     
-/**
-* Decodes an url safe base64 string
-*
-* The method should also decode regular base64 strings.
-*
-* @param string $data The encoded data.
-* @param bool $strict Returns FALSE if input contains character from outside the base64 alphabet.
-* @return Returns the original data or FALSE on failure. The returned data may be binary.
-*/
-    public function urlSafeDecode($data, $strict = false)
-    {
-        $data = strtr($data, array(
-            '_' => '/',
-            '-' => '+',
-        ));
-        if (strlen($data) % 2 != 0) {
-            $data .= '=';
-        }
-        return base64_decode($data, $strict);
-    }
 }
